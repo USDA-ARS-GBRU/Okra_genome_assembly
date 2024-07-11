@@ -1,0 +1,15 @@
+Hi-C Data Analysis Workflow
+1. Edit assembly in juicebox and export (.assembly file).
+2. Use python juicebox_assembly_converter.py to generate the .fasta, .agp, and .bed files from the .assembly file.
+3. Align the Hi-C reads to the new assembly using bwa mem (will get .bam file).
+bwa mem -5SPM ref.fa read1.fq read2.fq | samtools view -S -h -b -F 2316 > [aligned.bam]
+4. Use bam_to_mate_hist.py to QC mapping.
+5. matlock bam2 juicer to get the linkage data in a text file format
+matlock bam2 juicer input.bam out.links.txt
+6. Sort links
+sort -k2,2 -k6,6 out.links.txt > out.sorted.links.txt
+7. Use dups.awk (from juicer) to get the merged_nodups.txt file
+/project/software/el9/apps/juicer/1.6/scripts/dups.awk out.sorted.links.txt
+8. use makeAgpFromFasta.py and then agp2assembly.py to generate new .agp and .assembly files for the .fasta file created in step 2.
+9. use the 3d-dna/visualize/run-assembly-visualizer.sh command with the .assembly and merged_nodups.txt files to create a .hic file for the altered assembly.
+10. The .hic and .assembly files can be visualized in Juicebox.
