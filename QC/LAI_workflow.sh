@@ -1,5 +1,7 @@
 date
 
+ml genometools
+
 # run genometools
 gt suffixerator -db genome.fa -indexname genome.fa -tis -suf -lcp -des -ssp -sds -dna
 
